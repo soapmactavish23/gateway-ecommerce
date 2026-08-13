@@ -12,6 +12,17 @@ spring:
     gateway:
       server:
         webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: http://localhost:4200
+                allowedHeaders: '*'
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
           routes:
             - id: billing-route
               uri: lb://billing
@@ -34,11 +45,14 @@ spring:
               filters:
                 - RewritePath=/products/?(?<segment>.*), /api/v1/products$\{segment}
                 - AddResponseHeader=X-Path-rewrite-info, Path have been rewrite to /api/v1/products
-#                - name: RewritePath
-#                  args:
-#                    regexp: /products/?(?<segment>.*)
-#                    replacement: /api/v1/products$\{segment}
-
+              metadata:
+                cors:
+                  allowedOrigins: http://localhost:4200
+                  allowedMethods:
+                    - GET
+                    - POST
+                  allowedHeaders: '*'
+                  maxAge: 30
 
 eureka:
   client:
