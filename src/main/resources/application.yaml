@@ -12,6 +12,8 @@ spring:
     gateway:
       server:
         webflux:
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
           globalcors:
             cors-configurations:
               '[/**]':
@@ -39,20 +41,21 @@ spring:
                 - Path=/api/v1/products/**,/api/v1/categories/**
                 - Method=GET,POST,PUT,DELETE,OPTIONS
             - id: product-catalog-test-route
-              uri: http://localhost:8083
+              uri: lb://product-catalog
               predicates:
                 - Path=/products/**
               filters:
                 - RewritePath=/products/?(?<segment>.*), /api/v1/products$\{segment}
                 - AddResponseHeader=X-Path-rewrite-info, Path have been rewrite to /api/v1/products
-              metadata:
-                cors:
-                  allowedOrigins: http://localhost:4200
-                  allowedMethods:
-                    - GET
-                    - POST
-                  allowedHeaders: '*'
-                  maxAge: 30
+#              metadata:
+#                cors:
+#                  allowedOrigins: http://localhost:4200
+#                  allowedMethods:
+#                    - GET
+#                    - POST
+#                  allowedHeaders: '*'
+#                  maxAge: 30
+
 
 eureka:
   client:
