@@ -47,15 +47,10 @@ spring:
               filters:
                 - RewritePath=/products/?(?<segment>.*), /api/v1/products$\{segment}
                 - AddResponseHeader=X-Path-rewrite-info, Path have been rewrite to /api/v1/products
-#              metadata:
-#                cors:
-#                  allowedOrigins: http://localhost:4200
-#                  allowedMethods:
-#                    - GET
-#                    - POST
-#                  allowedHeaders: '*'
-#                  maxAge: 30
-
+            - id: user-management-route
+              uri: lb://authorization-server
+              predicates:
+                - Path=/api/v1/users/**
 
 eureka:
   client:
