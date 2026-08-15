@@ -8,6 +8,11 @@ logging:
 spring:
   application:
     name: gateway-ecommerce
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth.algashop.local:8081
   cloud:
     gateway:
       server:
