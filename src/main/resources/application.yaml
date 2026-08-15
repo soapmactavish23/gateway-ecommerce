@@ -19,6 +19,9 @@ spring:
         webflux:
           default-filters:
             - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 5000
           globalcors:
             add-to-simple-url-handler-mapping: true
             cors-configurations:
@@ -53,6 +56,9 @@ spring:
               filters:
                 - RewritePath=/products/?(?<segment>.*), /api/v1/products$\{segment}
                 - AddResponseHeader=X-Path-rewrite-info, Path have been rewrite to /api/v1/products
+              metadata:
+                response-timeout: 1000
+                connect-timeout: 1000
             - id: user-management-route
               uri: lb://authorization-server
               predicates:
