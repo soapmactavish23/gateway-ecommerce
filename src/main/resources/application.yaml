@@ -8,6 +8,12 @@ logging:
 spring:
   application:
     name: gateway-ecommerce
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: algashop
+      database: 3
   security:
     oauth2:
       resourceserver:
@@ -19,11 +25,11 @@ spring:
         webflux:
           route-refresh-listener:
             enabled: false
-#          filter:
-#            local-response-cache:
-#              enabled: true
-#              time-to-live: 1m
-#              size: 10MB
+          #          filter:
+          #            local-response-cache:
+          #              enabled: true
+          #              time-to-live: 1m
+          #              size: 10MB
           default-filters:
             - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
             - name: Retry
@@ -75,6 +81,13 @@ spring:
                 - Method=GET,POST,PUT,DELETE,OPTIONS
               filters:
                 - LocalResponseCache=5m,30MB
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter:
+                      replenishRate: 50
+                      burstCapacity: 200
+                      requestedTokens: 1
+                    key-resolver: "#{@rateLimitKeyResolver}"
             - id: product-catalog-test-route
               uri: lb://product-catalog
               predicates:
