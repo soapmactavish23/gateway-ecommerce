@@ -13,7 +13,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class GatewayEcommerceSecurityConfig {
 
     @Bean
-    SecurityWebFilterChain defaSecurityWebFilterChain(ServerHttpSecurity http) {
+    SecurityWebFilterChain defaultSecurityWebFilterChain(ServerHttpSecurity http) {
         http.cors(Customizer.withDefaults())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(authorize -> authorize
