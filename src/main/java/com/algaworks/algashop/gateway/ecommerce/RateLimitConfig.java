@@ -11,19 +11,21 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class RateLimitConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(RateLimitConfig.class);
-    private static final String DEFAULT_KEY = "anonymous";
+	private static final Logger log = LoggerFactory.getLogger(RateLimitConfig.class);
 
-    @Bean
-    public KeyResolver rateLimitKeyResolver() {
-        return exchange -> exchange.getPrincipal().map(principal -> {
-                    if(principal instanceof JwtAuthenticationToken jwtToken) {
-                        String sub = jwtToken.getToken().getClaimAsString("sub");
-                        return sub != null ? sub : DEFAULT_KEY;
-                    }
-                    return DEFAULT_KEY;
-                }).switchIfEmpty(Mono.just(DEFAULT_KEY))
-                .doOnNext(key -> log.info("Rate limit key: {}", key));
-    }
+	private static final String DEFAULT_KEY = "anonymous";
+
+	@Bean
+	public KeyResolver rateLimitKeyResolver() {
+		return exchange -> exchange.getPrincipal().map(principal -> {
+			if (principal instanceof JwtAuthenticationToken jwtToken) {
+				String sub = jwtToken.getToken().getClaimAsString("sub");
+				return sub != null ? sub : DEFAULT_KEY;
+			}
+			return DEFAULT_KEY;
+		})
+		.switchIfEmpty(Mono.just(DEFAULT_KEY))
+		.doOnNext(key -> log.info("Rate limit key: {}", key));
+	}
 
 }

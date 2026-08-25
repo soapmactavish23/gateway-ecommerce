@@ -25,11 +25,11 @@ spring:
         webflux:
           route-refresh-listener:
             enabled: false
-          #          filter:
-          #            local-response-cache:
-          #              enabled: true
-          #              time-to-live: 1m
-          #              size: 10MB
+#          filter:
+#            local-response-cache:
+#              enabled: true
+#              time-to-live: 1m
+#              size: 10MB
           default-filters:
             - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
             - name: Retry
@@ -47,14 +47,14 @@ spring:
           globalcors:
             cors-configurations:
               '[/**]':
-                allowedOrigins: http://localhost:4200
-                allowedHeaders: '*'
-                allowedMethods:
-                  - GET
-                  - POST
-                  - PUT
-                  - DELETE
-                  - OPTIONS
+                  allowedOrigins: http://localhost:4200
+                  allowedHeaders: '*'
+                  allowedMethods:
+                    - GET
+                    - POST
+                    - PUT
+                    - DELETE
+                    - OPTIONS
           routes:
             - id: billing-route
               uri: lb://billing
