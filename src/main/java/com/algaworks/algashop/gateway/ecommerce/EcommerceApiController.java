@@ -13,30 +13,30 @@ import java.util.Map;
 @RequestMapping("/api/v1/ecommerce/home")
 public class EcommerceApiController {
 
-    private final WebClient webClient;
+	private final WebClient webClient;
 
-    public EcommerceApiController(WebClient webClient) {
-        this.webClient = webClient;
-    }
+	public EcommerceApiController(WebClient webClient) {
+		this.webClient = webClient;
+	}
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('SCOPE_products:read') and hasAuthority('SCOPE_categories:read')")
-    public Mono<Map<String, Object>> getHome() {
-        Mono<Map> productList = webClient.get()
-                .uri("lb://product-catalog/api/v1/products?hasDiscount=true")
-                .retrieve()
-                .bodyToMono(Map.class);
+	@GetMapping
+	@PreAuthorize("hasAuthority('SCOPE_products:read') and hasAuthority('SCOPE_categories:read')")
+	public Mono<Map<String, Object>> getHome() {
+		Mono<Map> productList = webClient.get()
+				.uri("lb://product-catalog/api/v1/products?hasDiscount=true")
+				.retrieve()
+				.bodyToMono(Map.class);
 
-        Mono<Map> categoryList = webClient.get()
-                .uri("lb://product-catalog/api/v1/categories")
-                .retrieve()
-                .bodyToMono(Map.class);
+		Mono<Map> categoryList = webClient.get()
+				.uri("lb://product-catalog/api/v1/categories")
+				.retrieve()
+				.bodyToMono(Map.class);
 
-        return Mono.zip(productList, categoryList)
-                .map(tuple -> Map.of(
-                        "highlights", tuple.getT1().get("content"),
-                        "categories", tuple.getT2().get("content")
-                ));
-    }
+		return Mono.zip(productList, categoryList)
+				.map(tuple -> Map.of(
+						"highlights", tuple.getT1().get("content"),
+						"categories", tuple.getT2().get("content")
+				));
+	}
 
 }

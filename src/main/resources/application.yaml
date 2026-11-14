@@ -49,7 +49,7 @@ spring:
             - id: ordering-route
               uri: lb://ordering
               predicates:
-                - Path=/api/v1/customers/**,/api/v1/shipping-cost-previews,/api/v2/customers/**
+                - Path=/api/v1/customers/**,/api/v1/shipping-cost-previews
                 - Method=GET,POST,PUT,DELETE,OPTIONS
               filters:
                 - name: CircuitBreaker
